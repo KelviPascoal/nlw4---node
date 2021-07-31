@@ -8,7 +8,7 @@ interface IRequest {
 }
 
 export class CreateUserService {
-  async execute({ name, email }: IRequest): Promise<User > {
+  async execute({ name, email }: IRequest): Promise<User> {
     const userRepository = new UserRepository()
     const userCreated = await userRepository.create({
        name,
