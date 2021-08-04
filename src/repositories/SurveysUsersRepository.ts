@@ -1,5 +1,5 @@
 import { SurveysUsers } from "../entities/SurveysUsers";
-import { EntityRepository, getRepository, Repository } from "typeorm";
+import { EntityRepository, getRepository, IsNull, Not } from "typeorm";
 import { User } from "../entities/User";
 import { Surveys } from "../entities/Surveys";
 
@@ -26,8 +26,8 @@ export class SurveysUsersRepistory {
   async create(data: IRequest): Promise<any> {
     const { user_id, survey_id, id } = data;
     const surveyUserExist = await this.ormRepository.findOne({
-      where: { user_id: user_id, value: null},
-      relations: [ "user", "survey"]
+      where: { user_id: user_id, value: null },
+      relations: ["user", "survey"],
     });
 
     if (surveyUserExist) {
@@ -45,11 +45,18 @@ export class SurveysUsersRepistory {
   }
 
   async findById(id: string): Promise<SurveysUsers | undefined> {
-    const surveyUser = await this.ormRepository.findOne({where: {id: id}})
+    const surveyUser = await this.ormRepository.findOne({ where: { id: id } });
     return surveyUser;
   }
 
   async save(surveyUser: SurveysUsers): Promise<void> {
-    await this.ormRepository.save(surveyUser)
+    await this.ormRepository.save(surveyUser);
+  }
+
+  async findSurvey(survey_id: string): Promise<SurveysUsers[]> {
+    const surveysUsers = await this.ormRepository.find({
+      where: { survey_id: survey_id, value: Not(IsNull()) },
+    });
+    return surveysUsers;
   }
 }
