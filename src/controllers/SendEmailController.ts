@@ -36,7 +36,7 @@ export class SendEmailController {
             name: user.name,
             title: survey.title,
             description: survey.description,
-            user_id: user.id,
+            id: surveyUser.id,
             link: process.env.URL_MAIL
         }
 

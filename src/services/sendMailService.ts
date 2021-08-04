@@ -7,7 +7,7 @@ interface IVariables {
   title: string;
   description: string;
   link?: string;
-  user_id: string;
+  id: string;
 }
 
 class SendMailService {
@@ -42,7 +42,7 @@ class SendMailService {
       title: subject,
       description: variables.description,
       link: variables.link,
-      user_id: variables.user_id,
+      id: variables.id,
     });
 
     const message = await this.client.sendMail({

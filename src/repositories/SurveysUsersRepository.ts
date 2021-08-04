@@ -23,11 +23,11 @@ interface IResponse {
 export class SurveysUsersRepistory {
   public ormRepository = getRepository(SurveysUsers);
 
-  async create(data: IRequest): Promise<IResponse> {
+  async create(data: IRequest): Promise<any> {
     const { user_id, survey_id, id } = data;
     const surveyUserExist = await this.ormRepository.findOne({
-      where: { user_id: user_id, survey_id: survey_id },
-      relations: ["user", "survey"],
+      where: { user_id: user_id, value: null},
+      relations: [ "user", "survey"]
     });
 
     if (surveyUserExist) {
@@ -42,5 +42,14 @@ export class SurveysUsersRepistory {
     });
     await this.ormRepository.save(surveyUser);
     return surveyUser;
+  }
+
+  async findById(id: string): Promise<SurveysUsers | undefined> {
+    const surveyUser = await this.ormRepository.findOne({where: {id: id}})
+    return surveyUser;
+  }
+
+  async save(surveyUser: SurveysUsers): Promise<void> {
+    await this.ormRepository.save(surveyUser)
   }
 }
